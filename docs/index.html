@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工业网络调试助手 NetDebugAssistant · 串口/TCP/Modbus/MQTT 调试利器</title>
+<meta name="description" content="免费、绿色、无广告的工业网络调试助手：串口、TCP/UDP、Modbus RTU/ASCII/TCP、MQTT、S7comm、实时趋势、抓包与脚本自动化，支持自动更新。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b1622'/%3E%3Cpath d='M4 16h4l3-8 5 16 4-11 3 3h5' fill='none' stroke='%2322d3ee' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap">
+<style>
+:root{
+  --bg:#0b1622; --bg2:#0e1c2c; --panel:#122438; --panel2:#162c44;
+  --line:rgba(120,170,210,.14); --line2:rgba(120,170,210,.22);
+  --ink:#e8f1f9; --muted:#94a9be; --faint:#6b8299;
+  --cyan:#22d3ee; --blue:#3b82f6; --teal:#2dd4bf;
+  --mono:ui-monospace,"Cascadia Code","JetBrains Mono",Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC",-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.7;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(120,170,210,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(120,170,210,.05) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 30%,transparent 100%);
+}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+a{color:inherit;text-decoration:none}
+.mono{font-family:var(--mono)}
+
+/* ===== nav ===== */
+header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+  background:rgba(11,22,34,.78);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:17px}
+.brand svg{flex:none}
+.brand small{display:block;font-size:10.5px;font-weight:400;color:var(--faint);letter-spacing:.12em}
+.nav-links{display:flex;gap:30px;align-items:center;font-size:14px;color:var(--muted)}
+.nav-links a:hover{color:var(--cyan)}
+.nav-cta{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#04121d!important;
+  font-weight:700;padding:8px 18px;border-radius:9px;font-size:13.5px}
+.burger{display:none;background:none;border:0;cursor:pointer}
+.burger span{display:block;width:24px;height:2px;background:var(--ink);margin:5px 0;border-radius:2px}
+
+/* ===== hero ===== */
+.hero{padding:88px 0 70px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--cyan);
+  border:1px solid var(--line2);padding:5px 13px;border-radius:30px;background:rgba(34,211,238,.06);margin-bottom:24px}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+h1{font-size:clamp(32px,4.6vw,52px);font-weight:900;line-height:1.16;letter-spacing:-.01em}
+h1 .grad{background:linear-gradient(120deg,var(--cyan),var(--teal) 55%,var(--blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:16.5px;color:var(--muted);margin:22px 0 32px;max-width:520px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:11px;
+  font-weight:700;font-size:15px;cursor:pointer;border:1px solid transparent;transition:.18s}
+.btn-primary{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#04121d}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(34,211,238,.25)}
+.btn-ghost{background:rgba(255,255,255,.04);border-color:var(--line2);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+.hero-meta{display:flex;gap:26px;margin-top:34px;flex-wrap:wrap}
+.hero-meta div{font-size:13px;color:var(--faint)}
+.hero-meta b{display:block;font-size:22px;color:var(--ink);font-weight:800;font-family:var(--mono)}
+
+/* terminal card */
+.term{background:var(--panel);border:1px solid var(--line2);border-radius:14px;overflow:hidden;
+  box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.term-bar{display:flex;align-items:center;gap:7px;padding:12px 15px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.term-bar i{width:11px;height:11px;border-radius:50%;display:block}
+.term-bar .t{margin-left:10px;font-size:12px;color:var(--faint);font-family:var(--mono)}
+.term-body{padding:20px;font-family:var(--mono);font-size:12.8px;line-height:2}
+.term-body .tx{color:var(--faint)}
+.term-body .out{color:var(--teal)}
+.term-body .hex{color:var(--cyan)}
+.term-body .ok{color:#7ee2a8}
+.term-body .dim{color:var(--muted)}
+.blink{animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ===== section ===== */
+section.block{padding:74px 0}
+.sec-head{text-align:center;max-width:680px;margin:0 auto 52px}
+.sec-head .kicker{font-family:var(--mono);font-size:12.5px;color:var(--cyan);letter-spacing:.18em;text-transform:uppercase}
+.sec-head h2{font-size:clamp(26px,3.2vw,36px);font-weight:800;margin:12px 0 14px}
+.sec-head p{color:var(--muted);font-size:15.5px}
+
+/* feature grid */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);
+  border-radius:14px;padding:26px 24px;transition:.2s;position:relative;overflow:hidden}
+.card::after{content:"";position:absolute;inset:0;border-radius:14px;opacity:0;transition:.2s;
+  background:radial-gradient(420px circle at var(--mx,50%) 0,rgba(34,211,238,.09),transparent 60%)}
+.card:hover{border-color:var(--line2);transform:translateY(-3px)}
+.card:hover::after{opacity:1}
+.card .ic{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;margin-bottom:16px;
+  background:rgba(34,211,238,.09);color:var(--cyan);border:1px solid var(--line2)}
+.card h3{font-size:16.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card p{font-size:13.6px;color:var(--muted)}
+.card .tags{margin-top:13px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--mono);font-size:10.8px;color:var(--faint);border:1px solid var(--line);
+  padding:2px 8px;border-radius:5px}
+
+/* update band */
+.update-band{background:linear-gradient(180deg,var(--bg2),var(--bg));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.update-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:54px;align-items:center}
+.update-steps{list-style:none;display:flex;flex-direction:column;gap:18px}
+.update-steps li{display:flex;gap:16px;align-items:flex-start}
+.step-num{flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:700;font-size:14px;color:#04121d;
+  background:linear-gradient(135deg,var(--cyan),var(--teal))}
+.update-steps h4{font-size:15.5px;font-weight:700}
+.update-steps p{font-size:13.5px;color:var(--muted)}
+.sec-head.left{text-align:left;margin:0 0 30px}
+.update-card{background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:8px 24px}
+.update-card .row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.update-card .row:last-child{border-bottom:0}
+.update-card .row b{font-family:var(--mono);color:var(--cyan)}
+.pill{font-size:11px;color:var(--teal);border:1px solid var(--line2);padding:2px 10px;border-radius:20px}
+
+/* download */
+.dl-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.dl-card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line2);
+  border-radius:16px;padding:32px 30px;text-align:center;transition:.2s}
+.dl-card:hover{transform:translateY(-3px);border-color:var(--cyan)}
+.dl-card .big{width:56px;height:56px;margin:0 auto 18px;border-radius:14px;display:grid;place-items:center;
+  background:rgba(34,211,238,.1);color:var(--cyan);border:1px solid var(--line2)}
+.dl-card h3{font-size:19px;font-weight:800;margin-bottom:8px}
+.dl-card .size{font-family:var(--mono);color:var(--cyan);font-size:14px;margin-bottom:6px}
+.dl-card p{font-size:13px;color:var(--muted);margin-bottom:22px;min-height:40px}
+.dl-card .btn{width:100%;justify-content:center}
+.req{margin-top:38px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:13px;
+  padding:20px 26px;font-size:13.3px;color:var(--muted);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.req b{color:var(--ink)}
+.req a{color:var(--cyan)}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:46px 0 34px;background:var(--bg2)}
+.foot-grid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+.foot-grid p{font-size:12.8px;color:var(--faint);max-width:440px;margin-top:12px}
+.foot-links{display:flex;gap:44px;font-size:13.5px}
+.foot-links h5{font-size:12px;color:var(--faint);margin-bottom:12px;letter-spacing:.1em}
+.foot-links a{display:block;color:var(--muted);margin-bottom:8px}
+.foot-links a:hover{color:var(--cyan)}
+.copyright{margin-top:34px;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+@media(max-width:900px){
+  .hero-grid,.update-grid{grid-template-columns:1fr;gap:38px}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .dl-grid{grid-template-columns:1fr}
+  .nav-links{position:fixed;inset:64px 0 auto 0;background:var(--bg2);flex-direction:column;gap:0;
+    padding:8px 24px 20px;border-bottom:1px solid var(--line2);display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 0;width:100%;border-bottom:1px solid var(--line)}
+  .burger{display:block}
+}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.hero{padding:54px 0 40px}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#122438"/><path d="M3 16h4l3-8 5 16 4-11 3 3h5" fill="none" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>工业网络调试助手<small>NET DEBUG ASSISTANT</small></span>
+    </div>
+    <nav class="nav-links" id="navlinks">
+      <a href="#features">功能</a>
+      <a href="#update">自动更新</a>
+      <a href="#download">下载</a>
+      <a href="https://github.com/haoeastspeed/NetDebugAssistant-Download" target="_blank" rel="noopener">GitHub</a>
+      <a href="#download" class="nav-cta">免费下载</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="菜单"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><i></i>免费 · 绿色单文件 · 无广告 · v1.6.0</span>
+      <h1>让每一条<span class="grad">工业报文</span><br>都清晰可见、可控可测</h1>
+      <p class="lead">面向自动化与嵌入式工程师的一站式网络调试工具：串口、TCP/UDP、Modbus、MQTT、PLC 协议、实时趋势、抓包与脚本自动化，开箱即用。</p>
+      <div class="hero-actions">
+        <a href="#download" class="btn btn-primary">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          立即下载
+        </a>
+        <a href="https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/latest" target="_blank" rel="noopener" class="btn btn-ghost">查看更新日志</a>
+      </div>
+      <div class="hero-meta">
+        <div><b>4.6MB</b>轻量版体积</div>
+        <div><b>12+</b>调试模块</div>
+        <div><b>166</b>单元测试</div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-bar">
+        <i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i>
+        <span class="t">Modbus RTU · COM3 · 9600 8N1</span>
+      </div>
+      <div class="term-body">
+        <div class="tx">→ 01 03 00 00 00 02 C4 0B</div>
+        <div class="out">← 01 03 04 00 C8 00 0A 7B F2</div>
+        <div class="dim"><span class="ok">[OK]</span> 保持寄存器 #0 = <span class="hex">200</span>　#1 = <span class="hex">10</span></div>
+        <div>&nbsp;</div>
+        <div class="tx">→ TCP 192.168.1.10:502　MBAP 00 01 00 00 00 06</div>
+        <div class="out">← 00 01 00 00 00 07 03 04 00 C8 00 0A ..</div>
+        <div class="dim">RTT 3.2ms　TX 128 B　RX 256 B　丢包 0</div>
+        <div>&nbsp;</div>
+        <div class="ok">● 已连接　监听中<span class="blink">_</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">// ALL-IN-ONE TOOLBOX</div>
+      <h2>一个工具，覆盖现场调试全流程</h2>
+      <p>从物理串口到工业以太网，从单条报文到批量自动化，专业软件该有的能力这里都有。</p>
+    </div>
+    <div class="grid" id="grid">
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="4" y="7" width="16" height="10" rx="2"/><path d="M8 7V4m8 3V4M8 20v-3m8 3v-3"/></svg></div>
+        <h3>串口通信</h3>
+        <p>RS-232/485 全参数配置，支持引脚状态监测与非标准波特率，实时收发与十六进制显示。</p>
+        <div class="tags"><span class="tag">COM</span><span class="tag">DTR/RTS</span><span class="tag">HEX</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></div>
+        <h3>TCP / UDP</h3>
+        <p>客户端与服务端模式、多会话标签并行、IPv4/IPv6 双栈，连接状态与流量实时可见。</p>
+        <div class="tags"><span class="tag">Client/Server</span><span class="tag">IPv6</span><span class="tag">多会话</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 7h16M4 12h16M4 17h10"/><circle cx="18" cy="17" r="2.4"/></svg></div>
+        <h3>Modbus 主从</h3>
+        <p>RTU / ASCII / TCP 全协议主站与从站仿真，9 种数据类型、任意字序，寄存器网格可直接写回。</p>
+        <div class="tags"><span class="tag">RTU</span><span class="tag">ASCII</span><span class="tag">01-06 功能码</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3a4 4 0 014 4c0 1.5-.5 2.5-1.5 3.5L13 13h-2l-1.5-2.5C8.5 9.5 8 8.5 8 7a4 4 0 014-4z"/><path d="M9 16h6M10 19h4"/></svg></div>
+        <h3>MQTT 客户端</h3>
+        <p>自研 MQTT 3.1.1，支持 QoS 0/1/2、保活与掉线检测，主题订阅与发布一目了然。</p>
+        <div class="tags"><span class="tag">QoS 0/1/2</span><span class="tag">Keep-Alive</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h4M7 13h10M7 17h7"/></svg></div>
+        <h3>PLC 工业协议</h3>
+        <p>内置 S7comm、EtherNet/IP 主动主站，可直接读写西门子等 PLC 数据块，无需额外软件。</p>
+        <div class="tags"><span class="tag">S7comm</span><span class="tag">EtherNet/IP</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 17l5-6 4 4 5-8 4 5"/></svg></div>
+        <h3>实时趋势</h3>
+        <p>多通道数据曲线，原生 Canvas 与 ScottPlot 双引擎可选，支持缩放、统计与数据导出。</p>
+        <div class="tags"><span class="tag">多通道</span><span class="tag">缩放</span><span class="tag">双引擎</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+        <h3>报文抓包</h3>
+        <p>基于 pktmon 抓包并解析 pcapng，自动识别工业协议，支持过滤器与会话分离。</p>
+        <div class="tags"><span class="tag">pcapng</span><span class="tag">协议解析</span><span class="tag">过滤器</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 20v-6M12 4v2M12 10a5 5 0 00-5 5M12 10a5 5 0 015 5"/><path d="M5 15a7 7 0 0014 0"/></svg></div>
+        <h3>网络诊断</h3>
+        <p>Ping 连通性、子网设备扫描、端口探测，快速定位网段内的设备与链路问题。</p>
+        <div class="tags"><span class="tag">Ping</span><span class="tag">设备扫描</span><span class="tag">端口</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M8 4l-5 8 5 8M16 4l5 8-5 8M14 4l-4 16"/></svg></div>
+        <h3>脚本自动化</h3>
+        <p>内置 JavaScript 引擎，按接收规则自动应答、批量下发指令，替代重复手工操作。</p>
+        <div class="tags"><span class="tag">JS</span><span class="tag">规则应答</span><span class="tag">批量</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div>
+        <h3>录制与回放</h3>
+        <p>完整录制通信会话并随时回放，便于问题复现、回归测试与现场留档。</p>
+        <div class="tags"><span class="tag">会话录制</span><span class="tag">回放</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3a9 9 0 109 9"/><path d="M12 12l6-4"/><path d="M19 3v5h-5"/></svg></div>
+        <h3>轻量 HMI</h3>
+        <p>仪表盘、指示灯、柱状与数值控件搭建监控画面，支持阈值告警与故障提示。</p>
+        <div class="tags"><span class="tag">仪表</span><span class="tag">指示灯</span><span class="tag">告警</span></div>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 12h4l2 6 4-14 2 8h6"/></svg></div>
+        <h3>统计与故障注入</h3>
+        <p>通信流量统计仪表盘，支持错误/故障注入，验证设备在异常下的容错表现。</p>
+        <div class="tags"><span class="tag">TrafficStats</span><span class="tag">错误注入</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block update-band" id="update">
+  <div class="wrap update-grid">
+    <div>
+      <div class="sec-head left">
+        <div class="kicker">// AUTO UPDATE</div>
+        <h2>内置自动更新，始终用最新版</h2>
+        <p>更新能力完全自研、轻量无依赖。发现新版本后一键下载，经 SHA256 完整性校验再安装，安全可靠。</p>
+      </div>
+      <ul class="update-steps">
+        <li><span class="step-num">1</span><div><h4>检查版本</h4><p>启动时静默检查，也可在状态栏手动检查。</p></div></li>
+        <li><span class="step-num">2</span><div><h4>下载并校验</h4><p>流式下载显示进度与速率，SHA256 校验防止损坏或篡改。</p></div></li>
+        <li><span class="step-num">3</span><div><h4>替换并重启</h4><p>利用同卷可重命名特性原地自替换，失败自动回退跳板脚本。</p></div></li>
+      </ul>
+    </div>
+    <div class="update-card">
+      <div class="row"><span>当前版本</span><b>v1.6.0</b></div>
+      <div class="row"><span>最新版本</span><b>v1.6.0 <span class="pill">已是最新</span></b></div>
+      <div class="row"><span>更新通道</span><b>native / scottplot</b></div>
+      <div class="row"><span>完整性校验</span><b>SHA-256</b></div>
+      <div class="row"><span>清单文件</span><b>latest.json</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="download">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">// DOWNLOAD</div>
+      <h2>选择适合你的版本</h2>
+      <p>绿色单文件，下载即用；无需安装、不写注册表，免费且无广告。</p>
+    </div>
+    <div class="dl-grid">
+      <div class="dl-card">
+        <div class="big"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" stroke-linejoin="round"/></svg></div>
+        <h3>轻量版</h3>
+        <div class="size">4.6 MB</div>
+        <p>原生 Canvas 趋势，体积最小，适合日常串口与网络调试。</p>
+        <a href="https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.0/NetDebugAssistant-1.6.0.exe" class="btn btn-primary">下载轻量版</a>
+      </div>
+      <div class="dl-card">
+        <div class="big"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 17l5-6 4 4 5-8 4 5M3 21h18" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>图表版</h3>
+        <div class="size">17.2 MB</div>
+        <p>内置 ScottPlot 图表引擎，适合需要强大趋势分析与交互的场景。</p>
+        <a href="https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.0/NetDebugAssistant-1.6.0-charts.exe" class="btn btn-primary">下载图表版</a>
+      </div>
+    </div>
+    <div class="req">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01" stroke-linecap="round"/></svg>
+      <div><b>运行环境：</b>Windows 10/11 x64，需安装 <a href="https://dotnet.microsoft.com/download/dotnet/8.0" target="_blank" rel="noopener">.NET 8 桌面运行时</a>。历史版本见 <a href="https://github.com/haoeastspeed/NetDebugAssistant-Download/releases" target="_blank" rel="noopener">全部 Releases</a>。</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand">
+          <svg width="28" height="28" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#122438"/><path d="M3 16h4l3-8 5 16 4-11 3 3h5" fill="none" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>工业网络调试助手<small>NET DEBUG ASSISTANT</small></span>
+        </div>
+        <p>面向自动化与嵌入式工程师的免费工业网络调试工具。本发布渠道仅提供成品软件，源代码保持私有。</p>
+      </div>
+      <div class="foot-links">
+        <div>
+          <h5>产品</h5>
+          <a href="#features">功能特性</a>
+          <a href="#update">自动更新</a>
+          <a href="#download">下载</a>
+        </div>
+        <div>
+          <h5>资源</h5>
+          <a href="https://github.com/haoeastspeed/NetDebugAssistant-Download/releases" target="_blank" rel="noopener">更新日志</a>
+          <a href="https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/latest" target="_blank" rel="noopener">最新版本</a>
+          <a href="https://dotnet.microsoft.com/download/dotnet/8.0" target="_blank" rel="noopener">.NET 8 运行时</a>
+        </div>
+        <div>
+          <h5>关于</h5>
+          <a href="https://github.com/haoeastspeed" target="_blank" rel="noopener">haoeastspeed</a>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <span>© 2026 工业网络调试助手 NetDebugAssistant · 免费 · 无广告 · 绿色软件</span>
+      <span class="mono">v1.6.0</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+var burger = document.getElementById('burger');
+var nav = document.getElementById('navlinks');
+burger.addEventListener('click', function () { nav.classList.toggle('open'); });
+nav.querySelectorAll('a').forEach(function (a) {
+  a.addEventListener('click', function () { nav.classList.remove('open'); });
+});
+var grid = document.getElementById('grid');
+grid.addEventListener('mousemove', function (event) {
+  var cards = grid.querySelectorAll('.card');
+  for (var i = 0; i < cards.length; i++) {
+    var rect = cards[i].getBoundingClientRect();
+    cards[i].style.setProperty('--mx', (event.clientX - rect.left) + 'px');
+  }
+});
+</script>
+</body>
+</html>
