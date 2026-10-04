@@ -1,0 +1,21 @@
+{
+  "version": "1.6.0",
+  "released": "2026-10-04T05:04:29Z",
+  "notes": "- 新增软件自动更新：一键检查、下载并安装新版本\n- 更新包经 SHA256 完整性校验，更安全\n- 状态栏可手动检查更新，并可设置启动时自动检查",
+  "channels": {
+    "native": {
+      "version": "1.6.0",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.0/NetDebugAssistant-1.6.0.exe",
+      "sha256": "2a491d442c12d6da2862470ec51ed0b9c9d78509a6c8d2490a506f4cf1c0fa2a",
+      "size": 4782173,
+      "required": false
+    },
+    "scottplot": {
+      "version": "1.6.0",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.0/NetDebugAssistant-1.6.0-charts.exe",
+      "sha256": "0240720707c64dcc40fbdeadcb95049bc876a36aa50ba95050bd77f51922e4e9",
+      "size": 18044791,
+      "required": false
+    }
+  }
+}
