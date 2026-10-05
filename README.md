@@ -10,10 +10,16 @@
 ## 下载
 | 版本 | 体积 | 说明 | 下载 |
 | --- | --- | --- | --- |
-| 轻量版 v1.6.1 | 4.6 MB | 原生 Canvas 趋势，体积最小 | [CommDebugAssistant-1.6.1.exe](https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/CommDebugAssistant-1.6.1.exe) |
-| 图表版 v1.6.1 | 17.2 MB | 内置 ScottPlot 图表引擎 | [CommDebugAssistant-1.6.1-charts.exe](https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/CommDebugAssistant-1.6.1-charts.exe) |
+| 轻量版 v1.6.2 | 4.6 MB | 原生 Canvas 趋势，体积最小 | [CommDebugAssistant-1.6.2.exe](https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.2/CommDebugAssistant-1.6.2.exe) |
+| 图表版 v1.6.2 | 17.2 MB | 内置 ScottPlot 图表引擎 | [CommDebugAssistant-1.6.2-charts.exe](https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.2/CommDebugAssistant-1.6.2-charts.exe) |
 
 **运行环境**：Windows 10/11 x64，需安装 [.NET 8 桌面运行时](https://dotnet.microsoft.com/download/dotnet/8.0)。
+
+## v1.6.2 更新
+- 脚本纯 JS 沙箱隔离，修复安全隐患、深层递归崩溃与紧密循环卡死
+- 修正 S7comm、EtherNet/IP 帧格式，兼容真实 PLC/设备
+- 修复 MQTT 断连挂起、串口资源泄漏，修正 64 位字节序与 Modbus 广播写
+- 长数据悬停可见全文、窄窗口自适应，界面多处优化
 
 ## 功能特性
 - 串口通信：RS-232/485、引脚状态、非标准波特率、HEX 显示
