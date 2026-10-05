@@ -1,18 +1,18 @@
 {
   "version": "1.6.1",
-  "released": "2026-10-05T10:25:49Z",
+  "released": "2026-10-05T10:33:12Z",
   "notes": "- 软件更名为「通讯调试助手」\n- 原有通信、协议、趋势、抓包与自动更新能力保持不变",
   "channels": {
     "native": {
       "version": "1.6.1",
-      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/通讯调试助手-1.6.1.exe",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/CommDebugAssistant-1.6.1.exe",
       "sha256": "660ac9f46d11afbb07fb8fe68f96a009b95c588d563dacf756a1a01c327cdb4a",
       "size": 4782179,
       "required": false
     },
     "scottplot": {
       "version": "1.6.1",
-      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/通讯调试助手-1.6.1-图表版.exe",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/CommDebugAssistant-1.6.1-charts.exe",
       "sha256": "7228dcfd07cbe40cfe1869b6e274bf2fdab1d6881d11cdefbbf623405891578e",
       "size": 18044797,
       "required": false
