@@ -10,8 +10,8 @@
 ## 下载
 | 版本 | 体积 | 说明 | 下载 |
 | --- | --- | --- | --- |
-| 轻量版 v1.6.1 | 4.6 MB | 原生 Canvas 趋势，体积最小 | [通讯调试助手-1.6.1.exe](https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/通讯调试助手-1.6.1.exe) |
-| 图表版 v1.6.1 | 17.2 MB | 内置 ScottPlot 图表引擎 | [通讯调试助手-1.6.1-图表版.exe](https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/通讯调试助手-1.6.1-图表版.exe) |
+| 轻量版 v1.6.1 | 4.6 MB | 原生 Canvas 趋势，体积最小 | [CommDebugAssistant-1.6.1.exe](https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/CommDebugAssistant-1.6.1.exe) |
+| 图表版 v1.6.1 | 17.2 MB | 内置 ScottPlot 图表引擎 | [CommDebugAssistant-1.6.1-charts.exe](https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/CommDebugAssistant-1.6.1-charts.exe) |
 
 **运行环境**：Windows 10/11 x64，需安装 [.NET 8 桌面运行时](https://dotnet.microsoft.com/download/dotnet/8.0)。
 
