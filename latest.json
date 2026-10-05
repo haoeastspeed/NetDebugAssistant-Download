@@ -1,20 +1,20 @@
 {
-  "version": "1.6.1",
-  "released": "2026-10-05T10:33:12Z",
-  "notes": "- 软件更名为「通讯调试助手」\n- 原有通信、协议、趋势、抓包与自动更新能力保持不变",
+  "version": "1.6.2",
+  "released": "2026-10-05T14:38:51Z",
+  "notes": "- 修复脚本沙箱安全：纯 JS 隔离，禁止访问文件/进程/系统接口\n- 修复脚本深层递归、紧密循环导致的崩溃与卡死\n- 修复 S7comm、EtherNet-IP 帧格式，兼容真实 PLC/设备\n- 修复 MQTT 异常断开挂起、串口打开失败资源泄漏\n- 修正 64 位字节序与 Modbus 广播写入逻辑\n- 优化长数据显示、窄窗口自适应等界面细节",
   "channels": {
     "native": {
-      "version": "1.6.1",
-      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/CommDebugAssistant-1.6.1.exe",
-      "sha256": "660ac9f46d11afbb07fb8fe68f96a009b95c588d563dacf756a1a01c327cdb4a",
-      "size": 4782179,
+      "version": "1.6.2",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.2/CommDebugAssistant-1.6.2.exe",
+      "sha256": "846e22bcebe51b828095e6af5df038b97faa629500f5cc1ba96ff15ba5250709",
+      "size": 4797539,
       "required": false
     },
     "scottplot": {
-      "version": "1.6.1",
-      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.1/CommDebugAssistant-1.6.1-charts.exe",
-      "sha256": "7228dcfd07cbe40cfe1869b6e274bf2fdab1d6881d11cdefbbf623405891578e",
-      "size": 18044797,
+      "version": "1.6.2",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.2/CommDebugAssistant-1.6.2-charts.exe",
+      "sha256": "40d4e1fcc2d9c6b28076bb802b58559dd01e91a6083141eb2d335311778e1adf",
+      "size": 18060157,
       "required": false
     }
   }
