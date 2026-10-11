@@ -1,23 +1,23 @@
 {
-  "version": "1.6.3",
-  "released": "2026-10-11",
+  "version": "1.6.4",
+  "released": "2026-10-12",
   "channel": "stable",
   "assets": [
     {
       "backend": "native",
-      "name": "CommDebugAssistant-1.6.3.exe",
+      "name": "CommDebugAssistant-1.6.4.exe",
       "minOs": "win10-1809",
-      "sha256": "9F4593173E94A00AC8F69A26CAF3F3894176D923D8D31499FFF3DA12C37FCA2C",
-      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.3/CommDebugAssistant-1.6.3.exe",
-      "size": 4787354
+      "sha256": "C6D97BF6BBF2131EB0BBA67E44101EBB6077811F18606AC98BB43A7DDC001DB0",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.4/CommDebugAssistant-1.6.4.exe",
+      "size": 4822682
     },
     {
       "backend": "scottplot",
-      "name": "CommDebugAssistant-1.6.3-charts.exe",
+      "name": "CommDebugAssistant-1.6.4-charts.exe",
       "minOs": "win10-1809",
-      "sha256": "A096981BC019C571112A5A0AD5A85FA9BDD3A8FAFEA9794C75E70BB4C0F07B65",
-      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.3/CommDebugAssistant-1.6.3-charts.exe",
-      "size": 18047499
+      "sha256": "DDBF580154E98830B6B9F3F99E3681F73BE4E21A5D2ED57322F00C15A8BE2A5F",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.4/CommDebugAssistant-1.6.4-charts.exe",
+      "size": 18082827
     }
   ]
 }
