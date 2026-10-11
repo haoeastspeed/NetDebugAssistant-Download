@@ -1,23 +1,23 @@
 {
-    "released":  "2026-10-05",
-    "channel":  "stable",
-    "version":  "1.6.2",
-    "assets":  [
-                   {
-                       "backend":  "native",
-                       "name":  "CommDebugAssistant-1.6.2.exe",
-                       "minOs":  "win10-1809",
-                       "sha256":  "736D55770EB6257BF1253FDE24BBFAE0867A6FF96001382E5830B2208A5FCDAA",
-                       "url":  "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.2/CommDebugAssistant-1.6.2.exe",
-                       "size":  4797539
-                   },
-                   {
-                       "backend":  "scottplot",
-                       "name":  "CommDebugAssistant-1.6.2-charts.exe",
-                       "minOs":  "win10-1809",
-                       "sha256":  "560CC851CE09F28A121D47A8EBED96489DC192ED5059838C1AEE83D92F2608BA",
-                       "url":  "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.2/CommDebugAssistant-1.6.2-charts.exe",
-                       "size":  18060157
-                   }
-               ]
+  "version": "1.6.3",
+  "released": "2026-10-11",
+  "channel": "stable",
+  "assets": [
+    {
+      "backend": "native",
+      "name": "CommDebugAssistant-1.6.3.exe",
+      "minOs": "win10-1809",
+      "sha256": "9F4593173E94A00AC8F69A26CAF3F3894176D923D8D31499FFF3DA12C37FCA2C",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.3/CommDebugAssistant-1.6.3.exe",
+      "size": 4787354
+    },
+    {
+      "backend": "scottplot",
+      "name": "CommDebugAssistant-1.6.3-charts.exe",
+      "minOs": "win10-1809",
+      "sha256": "A096981BC019C571112A5A0AD5A85FA9BDD3A8FAFEA9794C75E70BB4C0F07B65",
+      "url": "https://github.com/haoeastspeed/NetDebugAssistant-Download/releases/download/v1.6.3/CommDebugAssistant-1.6.3-charts.exe",
+      "size": 18047499
+    }
+  ]
 }
